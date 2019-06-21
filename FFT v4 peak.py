@@ -32,7 +32,7 @@ def nxt_power_2(x):
     return 2**ceil(log2(x))
 
 
-def zero_padding(arr):
+def zero_pad(arr):
     """
     Adds a series of 0s to the end of signal such that signal length becomes a power of 2
 
@@ -159,8 +159,8 @@ for i in range(length_fixed):
     y_list.append(vibraY[i][0] - mean_y)
 
 # Zeroes are added to the end of the signal
-x_list = zero_padding(x_list)
-y_list = zero_padding(y_list)
+x_list = zero_pad(x_list)
+y_list = zero_pad(y_list)
 
 
 Fs = 1                          # Sampling Frequency of the signal
@@ -191,32 +191,32 @@ final_fourier_pwr_x = power_fourier_x[:len(power_fourier_x) // 2]
 final_fourier_pwr_y = power_fourier_y[:len(power_fourier_y) // 2]
 
 
-# FT data is converted to data frame and then exported to a excelsheet
+# FT data is converted to data frame
 outX = pd.DataFrame({"Fourier_X": final_fourier_x})
 outY = pd.DataFrame({"Fourier_Y": final_fourier_y})
 outPowerX = pd.DataFrame({"FourierPower_X": final_fourier_pwr_x})
 outPowerY = pd.DataFrame({"FourierPower_Y": final_fourier_pwr_y})
 
-writer = pd.ExcelWriter(output_data_path, engine='xlsxwriter')
+writer = pd.ExcelWriter(output_data_path, engine='xlsxwriter')  # The excel file writer is defined
 
-
+# The data frame is now written into an excel sheet
 outX.to_excel(writer, sheet_name="sheet1")
 outY.to_excel(writer, startcol=2, index=False, sheet_name='sheet1')
 outPowerX.to_excel(writer, startcol=3, index=False, sheet_name='sheet1')
 outPowerY.to_excel(writer, startcol=4, index=False, sheet_name='sheet1')
-
 writer.save()
 
-output_file("Graph/FFT_x.html")
+output_file("Graph/FFT_x.html")     # Name of the output file
 plot = figure(title="Vibration X fft - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
-              y_range=Range1d(-0.005, 1),
-              plot_width=1500,
-              plot_height=700)
+              y_range=Range1d(-0.005, 1),   # Y range is from -0.005 to 1, x is auto adjusted since it isn't defined
+              plot_width=1500,  # Width of the plot
+              plot_height=700   # Height of the plot
+              )
 
-plot.line(frq, final_fourier_x)
-show(plot)
+plot.line(frq, final_fourier_x)     # To plot the graph
+show(plot)                          # To display the plotted graph
 
 
 output_file("Graph/FFT_y.html")
@@ -253,5 +253,5 @@ plot = figure(title="Vibration Y fft Power - {} samples".format(length_fixed),
 plot.line(frq, final_fourier_pwr_y)
 show(plot)
 
-print("Peaks in Y axis \n (Amp, Frq)\n", peak_pos(final_fourier_pwr_y, frq))
+print("Peaks in Y axis \n (Amp, Frq)\n", peak_pos(final_fourier_pwr_y, frq))    # Print the positions of the peaks
 print("Peaks in X axis \n (Amp, Frq)\n", peak_pos(final_fourier_pwr_x, frq))
