@@ -127,8 +127,8 @@ def peak_pos(y_axis, x_axis):
     # Returns a list of tuples containing an ordered pair of amplitude and frequency
 
 
-input_data_path = "Data/Vibration Data - Modified.xlsx"
-output_data_path = "Data/Fourier transformed Vibration Data.xlsx"
+input_data_path = "Data/Vibration Data - Modified.xlsx"     # Read the input excel file at this location
+output_data_path = "Data/Fourier transformed Vibration Data.xlsx"   # Save the FFT excel file at this location
 vibration_data = pd.read_excel(input_data_path)
 
 # Separating the values of X and Y axis data
@@ -211,9 +211,8 @@ plot = figure(title="Vibration X fft - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
               y_range=Range1d(-0.005, 1),   # Y range is from -0.005 to 1, x is auto adjusted since it isn't defined
-              plot_width=1500,  # Width of the plot
-              plot_height=700   # Height of the plot
-              )
+              plot_width=1500,   # Width of the plot
+              plot_height=700)   # Height of the plot
 
 plot.line(frq, final_fourier_x)     # To plot the graph
 show(plot)                          # To display the plotted graph
@@ -226,7 +225,6 @@ plot = figure(title="Vibration Y fft - {} samples".format(length_fixed),
               y_range=Range1d(-0.005, 3),
               plot_width=1500,
               plot_height=700)
-
 plot.line(frq, final_fourier_y)
 show(plot)
 
@@ -237,7 +235,6 @@ plot = figure(title="Vibration X fft Power - {} samples".format(length_fixed),
               y_range=Range1d(-0.005, 1),
               plot_width=1500,
               plot_height=700)
-
 plot.line(frq, final_fourier_pwr_x)
 show(plot)
 
@@ -249,7 +246,6 @@ plot = figure(title="Vibration Y fft Power - {} samples".format(length_fixed),
               y_range=Range1d(-0.005, 3),
               plot_width=1500,
               plot_height=700)
-
 plot.line(frq, final_fourier_pwr_y)
 show(plot)
 
