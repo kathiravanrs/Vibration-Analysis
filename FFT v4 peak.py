@@ -206,6 +206,7 @@ outPowerX.to_excel(writer, startcol=3, index=False, sheet_name='sheet1')
 outPowerY.to_excel(writer, startcol=4, index=False, sheet_name='sheet1')
 writer.save()
 
+
 output_file("Graph/FFT_x.html")     # Name of the output file
 plot = figure(title="Vibration X fft - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
@@ -213,7 +214,6 @@ plot = figure(title="Vibration X fft - {} samples".format(length_fixed),
               y_range=Range1d(-0.005, 1),   # Y range is from -0.005 to 1, x is auto adjusted since it isn't defined
               plot_width=1500,   # Width of the plot
               plot_height=700)   # Height of the plot
-
 plot.line(frq, final_fourier_x)     # To plot the graph
 show(plot)                          # To display the plotted graph
 
