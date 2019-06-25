@@ -251,3 +251,6 @@ show(plot)
 
 print("Peaks in Y axis \n (Amp, Frq)\n", peak_pos(final_fourier_pwr_y, frq))    # Print the positions of the peaks
 print("Peaks in X axis \n (Amp, Frq)\n", peak_pos(final_fourier_pwr_x, frq))
+
+
+print("Peaks in X axis \n (Amp, Frq)\n", peak_pos(final_fourier_pwr_x, frq))
