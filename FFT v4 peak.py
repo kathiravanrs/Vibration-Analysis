@@ -5,13 +5,35 @@ The Fourier transform output is saved as a HTML file, which can be opened later 
 The data containing the values of Fourier Transform is also saved as an excel sheet which can be used for other purposes
 
 
+Change the following paths for getting the input file and saving the output:
+
+    1. vibration_input_path: Path to an EXCEL FILE containing the required vibration Data
+    2. Fourier_output_path: Path to a FOLDER where you want the final excel sheet to be saved
+    3. graph_output_path: Path to a FOLDER where you want the final graph of the FFT to be saved
+
+Before running the file, please check if you already installed the required libraries or packages.
+    The required external libraries to be installed are:
+        1. Pandas
+        2. bokeh
+        3. xlsxwriter
+        4. xlrd
+
+    If they are not installed, open command prompt and use these commands to install them:
+        1. pip install pandas
+        2. pip install bokeh
+        3. pip install xlsxwriter
+        4. pip install xlrd
+
+    You can use the same command 'pip install {library name}' to install other libraries if you want.
+
 """
 
-import pandas as pd     # To read and write excel files
-from cmath import pi, exp   # To calculate the Fourier Transform
-from math import log2, ceil     # To find the next higher power of 2
-from bokeh.plotting import figure, show, output_file    # To plot the figure, show the result and to save the output
-from bokeh.models import Range1d        # To fix the axis range in the final plot
+import pandas as pd                                      # To read and write excel files
+from cmath import pi, exp                                # To calculate the Fourier Transform
+from math import log2, ceil                              # To find the next higher power of 2
+from bokeh.plotting import figure, show, output_file     # To plot the figure, show the result and to save the output
+from bokeh.models import Range1d                         # To fix the axis range in the final plot
+import os                                                # To create directories to save files if it doesn't exist
 
 
 def nxt_power_2(x):
@@ -136,12 +158,20 @@ def peak_pos(y_axis, x_axis):
     # Returns a list of tuples containing an ordered pair of amplitude and frequency
 
 
-input_data_path = "Data/Vibration Data - Modified.xlsx"     # Read the input excel file at this location
-output_data_path = "Data/Fourier transformed Vibration Data.xlsx"   # Save the FFT excel file at this location
-vibration_data = pd.read_excel(input_data_path)
+vibration_input_file = "Data/Vibration Data - Modified.xlsx"             # Read the input excel file at this location
+Fourier_output_path = "FourierData/"                                   # Save the FFT excel file at this location
+graph_output_path = "Graph/"
+
+if not os.path.exists(Fourier_output_path):     # Check if the given path already exists
+    os.makedirs(Fourier_output_path)            # Create a new directory if it doesn't exist
+
+if not os.path.exists(graph_output_path):
+    os.makedirs(graph_output_path)
+
+vibration_data = pd.read_excel(vibration_input_file)
 
 # Separating the values of X and Y axis data
-vibraX = pd.DataFrame(vibration_data, columns=['VibraX'])
+vibraX = pd.DataFrame(vibration_data, columns=['VibraX'])   # Separate the values under the column name 'VibraX'
 vibraY = pd.DataFrame(vibration_data, columns=['VibraY'])
 
 # Converting dataframes in to a python list
@@ -206,7 +236,9 @@ outY = pd.DataFrame({"Fourier_Y": final_fourier_y})
 outPowerX = pd.DataFrame({"FourierPower_X": final_fourier_pwr_x})
 outPowerY = pd.DataFrame({"FourierPower_Y": final_fourier_pwr_y})
 
-writer = pd.ExcelWriter(output_data_path, engine='xlsxwriter')  # The excel file writer is defined
+
+# The excel file writer is defined along with the filename and path
+writer = pd.ExcelWriter(Fourier_output_path + "Fourier transformed Vibration Data.xlsx", engine='xlsxwriter')
 
 # The data frame is now written into an excel sheet
 outX.to_excel(writer, sheet_name="sheet1")
@@ -216,7 +248,7 @@ outPowerY.to_excel(writer, startcol=4, index=False, sheet_name='sheet1')
 writer.save()
 
 
-output_file("Graph/FFT_x.html")     # Name of the output file
+output_file(graph_output_path + "FFT_x.html")     # Name of the output file at the predefined path
 plot = figure(title="Vibration X fft - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
@@ -227,7 +259,7 @@ plot.line(frq, final_fourier_x)     # To plot the graph
 show(plot)                          # To display the plotted graph
 
 
-output_file("Graph/FFT_y.html")
+output_file(graph_output_path + "FFT_y.html")
 plot = figure(title="Vibration Y fft - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
@@ -237,7 +269,7 @@ plot = figure(title="Vibration Y fft - {} samples".format(length_fixed),
 plot.line(frq, final_fourier_y)
 show(plot)
 
-output_file("Graph/FFT_Power_x.html")
+output_file(graph_output_path + "FFT_Power_x.html")
 plot = figure(title="Vibration X fft Power - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
@@ -248,7 +280,7 @@ plot.line(frq, final_fourier_pwr_x)
 show(plot)
 
 
-output_file("Graph/FFT_Power_y.html")
+output_file(graph_output_path + "FFT_Power_y.html")
 plot = figure(title="Vibration Y fft Power - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
