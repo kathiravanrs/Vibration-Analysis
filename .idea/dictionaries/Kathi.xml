@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
   <dictionary name="Kathi">
     <words>
+      <w>bokeh</w>
       <w>dataframes</w>
       <w>excelsheet</w>
       <w>maxima</w>
@@ -11,6 +12,7 @@
       <w>sumy</w>
       <w>tukey</w>
       <w>vibra</w>
+      <w>xlrd</w>
       <w>xlsx</w>
       <w>xlsxwriter</w>
     </words>

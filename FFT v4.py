@@ -171,18 +171,22 @@ if not os.path.exists(graph_output_path):
 
 time = datetime.now().strftime(" %H-%M-%S")  # Get the current time
 
-vibration_data = pd.read_excel(vibration_input_file)
+vibration_data = pd.read_excel(vibration_input_file) # Read the excel file as input
+
 
 # Separating the values of X and Y axis data
 vibraX = pd.DataFrame(vibration_data, columns=['VibraX'])   # Separate the values under the column name 'VibraX'
 vibraY = pd.DataFrame(vibration_data, columns=['VibraY'])
 
+
 # Converting dataframes in to a python list
 vibraY = vibraY.values.tolist()
 vibraX = vibraX.values.tolist()
 
+
 # To limit the number or samples
 length_fixed = 1024
+
 
 # To calculate the sum of the data
 sum_x, sum_y = 0, 0
@@ -190,15 +194,18 @@ for i in range(length_fixed):
     sum_y += vibraY[i][0]
     sum_x += vibraX[i][0]
 
+
 # To calculate the mean of the data
 mean_x = sum_x / length_fixed
 mean_y = sum_y / length_fixed
+
 
 # Mean is subtracted from the data to remove the DC offset (Peak appearing at 0Hz, though there is no DC component)
 x_list, y_list = [], []
 for i in range(length_fixed):
     x_list.append(vibraX[i][0] - mean_x)
     y_list.append(vibraY[i][0] - mean_y)
+
 
 # Zeroes are added to the end of the signal
 x_list = zero_pad(x_list)
@@ -229,6 +236,7 @@ power_fourier_y = [(abs(y) / len(fourier_y_list))**2 for y in fourier_y_list]
 final_fourier_x = abs_fourier_x[:len(abs_fourier_x) // 2]
 final_fourier_y = abs_fourier_y[:len(abs_fourier_y) // 2]
 
+
 final_fourier_pwr_x = power_fourier_x[:len(power_fourier_x) // 2]
 final_fourier_pwr_y = power_fourier_y[:len(power_fourier_y) // 2]
 
@@ -242,6 +250,7 @@ outPowerY = pd.DataFrame({"FourierPower_Y": final_fourier_pwr_y})
 
 # The excel file writer is defined along with the filename and path
 writer = pd.ExcelWriter(Fourier_output_path + "Fourier transformed Data   " + time + ".xlsx", engine='xlsxwriter')
+
 
 # The data frame is now written into an excel sheet
 outX.to_excel(writer, sheet_name="sheet1")
@@ -272,6 +281,7 @@ plot = figure(title="Vibration Y fft - {} samples".format(length_fixed),
 plot.line(frq, final_fourier_y)
 show(plot)
 
+
 output_file(graph_output_path + "FFT_Power_x   " + time + ".html")
 plot = figure(title="Vibration X fft Power - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
@@ -292,6 +302,7 @@ plot = figure(title="Vibration Y fft Power - {} samples".format(length_fixed),
               plot_height=700)
 plot.line(frq, final_fourier_pwr_y)
 show(plot)
+
 
 print("Peaks in Y axis \n (Frq, Amp)\n", peak_pos(final_fourier_pwr_y, frq))    # Print the positions of the peaks
 print("Peaks in X axis \n (Frq, Amp)\n", peak_pos(final_fourier_pwr_x, frq))
