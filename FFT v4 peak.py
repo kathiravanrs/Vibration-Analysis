@@ -1,3 +1,12 @@
+"""
+Python script to take an excel sheet as input and produce a graphical representation of its fourier transform.
+The Fourier transform output is saved as a HTML file, which can be opened later for viewing
+
+The data containing the values of Fourier Transform is also saved as an excel sheet which can be used for other purposes
+
+
+"""
+
 import pandas as pd     # To read and write excel files
 from cmath import pi, exp   # To calculate the Fourier Transform
 from math import log2, ceil     # To find the next higher power of 2
@@ -228,7 +237,7 @@ plot = figure(title="Vibration Y fft - {} samples".format(length_fixed),
 plot.line(frq, final_fourier_y)
 show(plot)
 
-output_file("Graph/Power_x.html")
+output_file("Graph/FFT_Power_x.html")
 plot = figure(title="Vibration X fft Power - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
@@ -239,7 +248,7 @@ plot.line(frq, final_fourier_pwr_x)
 show(plot)
 
 
-output_file("Graph/Power_y.html")
+output_file("Graph/FFT_Power_y.html")
 plot = figure(title="Vibration Y fft Power - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
