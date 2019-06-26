@@ -33,6 +33,7 @@ from cmath import pi, exp                                # To calculate the Four
 from math import log2, ceil                              # To find the next higher power of 2
 from bokeh.plotting import figure, show, output_file     # To plot the figure, show the result and to save the output
 from bokeh.models import Range1d                         # To fix the axis range in the final plot
+from datetime import datetime                            # To get the date and time to prevent overwriting of files
 import os                                                # To create directories to save files if it doesn't exist
 
 
@@ -168,6 +169,8 @@ if not os.path.exists(Fourier_output_path):     # Check if the given path alread
 if not os.path.exists(graph_output_path):
     os.makedirs(graph_output_path)
 
+time = datetime.now().strftime("%D:%H:%M:%S")   # Get the current date and time
+
 vibration_data = pd.read_excel(vibration_input_file)
 
 # Separating the values of X and Y axis data
@@ -238,7 +241,7 @@ outPowerY = pd.DataFrame({"FourierPower_Y": final_fourier_pwr_y})
 
 
 # The excel file writer is defined along with the filename and path
-writer = pd.ExcelWriter(Fourier_output_path + "Fourier transformed Vibration Data.xlsx", engine='xlsxwriter')
+writer = pd.ExcelWriter(Fourier_output_path + "Fourier transformed Vibration Data.xlsx" + time, engine='xlsxwriter')
 
 # The data frame is now written into an excel sheet
 outX.to_excel(writer, sheet_name="sheet1")
@@ -248,18 +251,18 @@ outPowerY.to_excel(writer, startcol=4, index=False, sheet_name='sheet1')
 writer.save()
 
 
-output_file(graph_output_path + "FFT_x.html")     # Name of the output file at the predefined path
+output_file(graph_output_path + "FFT_x.html" + time)     # Name of the output file at the predefined path
 plot = figure(title="Vibration X fft - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
               y_range=Range1d(-0.005, 1),   # Change this to alter the min and max value in Y axis
-              plot_width=1500,   # Width of the plot
-              plot_height=700)   # Height of the plot
-plot.line(frq, final_fourier_x)     # To plot the graph
-show(plot)                          # To display the plotted graph
+              plot_width=1500,              # Width of the plot
+              plot_height=700)              # Height of the plot
+plot.line(frq, final_fourier_x)             # To plot the graph
+show(plot)                                  # To open and display the plotted graph
 
 
-output_file(graph_output_path + "FFT_y.html")
+output_file(graph_output_path + "FFT_y.html" + time)
 plot = figure(title="Vibration Y fft - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
@@ -269,7 +272,7 @@ plot = figure(title="Vibration Y fft - {} samples".format(length_fixed),
 plot.line(frq, final_fourier_y)
 show(plot)
 
-output_file(graph_output_path + "FFT_Power_x.html")
+output_file(graph_output_path + "FFT_Power_x.html" + time)
 plot = figure(title="Vibration X fft Power - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
@@ -280,7 +283,7 @@ plot.line(frq, final_fourier_pwr_x)
 show(plot)
 
 
-output_file(graph_output_path + "FFT_Power_y.html")
+output_file(graph_output_path + "FFT_Power_y.html" + time)
 plot = figure(title="Vibration Y fft Power - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
