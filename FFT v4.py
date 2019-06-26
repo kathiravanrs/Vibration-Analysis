@@ -160,18 +160,18 @@ def peak_pos(y_axis, x_axis):
 
 
 vibration_input_file = "Vibration Data/Vibration Data - Modified.xlsx"     # Read the input excel file at this location
-Fourier_output_path = "Fourier Data/"                                       # Save the FFT excel file at this location
+Fourier_output_path = "Fourier Data/"                                      # Save the FFT excel file at this location
 graph_output_path = "Graph/"
 
-if not os.path.exists(Fourier_output_path):     # Check if the given path already exists
-    os.makedirs(Fourier_output_path)            # Create a new directory if it doesn't exist
+if not os.path.exists(Fourier_output_path):                 # Check if the given path already exists
+    os.makedirs(Fourier_output_path)                        # Create a new directory if it doesn't exist
 
 if not os.path.exists(graph_output_path):
     os.makedirs(graph_output_path)
 
-time = datetime.now().strftime(" %H-%M-%S")  # Get the current time
+time = datetime.now().strftime(" %H-%M-%S")                 # Get the current time
 
-vibration_data = pd.read_excel(vibration_input_file) # Read the excel file as input
+vibration_data = pd.read_excel(vibration_input_file)        # Read the excel file as input
 
 
 # Separating the values of X and Y axis data
@@ -212,7 +212,7 @@ x_list = zero_pad(x_list)
 y_list = zero_pad(y_list)
 
 
-Fs = 35                          # Sampling Frequency of the signal
+Fs = 35                         # Sampling Frequency of the signal
 n = len(x_list)                 # Number of samples
 k = [i for i in range(n)]       # List of values from 0 to n [0, 1, 2, .... 4093, 4094, 4095]
 T = n / Fs                      # Total time = No of sample/Sample frequency
