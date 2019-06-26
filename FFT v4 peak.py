@@ -163,7 +163,7 @@ x_list = zero_pad(x_list)
 y_list = zero_pad(y_list)
 
 
-Fs = 1                          # Sampling Frequency of the signal
+Fs = 35                          # Sampling Frequency of the signal
 n = len(x_list)                 # Number of samples
 k = [i for i in range(n)]       # List of values from 0 to n [0, 1, 2, .... 4093, 4094, 4095]
 T = n / Fs                      # Total time = No of sample/Sample frequency
@@ -211,7 +211,7 @@ output_file("Graph/FFT_x.html")     # Name of the output file
 plot = figure(title="Vibration X fft - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
-              y_range=Range1d(-0.005, 1),   # Y range is from -0.005 to 1, x is auto adjusted since it isn't defined
+              y_range=Range1d(-0.005, 1),   # Change this to alter the min and max value in Y axis
               plot_width=1500,   # Width of the plot
               plot_height=700)   # Height of the plot
 plot.line(frq, final_fourier_x)     # To plot the graph
@@ -222,7 +222,7 @@ output_file("Graph/FFT_y.html")
 plot = figure(title="Vibration Y fft - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
-              y_range=Range1d(-0.005, 3),
+              y_range=Range1d(-0.005, 3),   # Change this to alter the min and max value in Y axis
               plot_width=1500,
               plot_height=700)
 plot.line(frq, final_fourier_y)
@@ -232,7 +232,7 @@ output_file("Graph/Power_x.html")
 plot = figure(title="Vibration X fft Power - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
-              y_range=Range1d(-0.005, 1),
+              y_range=Range1d(-0.005, 1),   # Change this to alter the min and max value in Y axis
               plot_width=1500,
               plot_height=700)
 plot.line(frq, final_fourier_pwr_x)
@@ -243,14 +243,11 @@ output_file("Graph/Power_y.html")
 plot = figure(title="Vibration Y fft Power - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
-              y_range=Range1d(-0.005, 3),
+              y_range=Range1d(-0.005, 3),   # Change this to alter the min and max value in Y axis
               plot_width=1500,
               plot_height=700)
 plot.line(frq, final_fourier_pwr_y)
 show(plot)
 
-print("Peaks in Y axis \n (Amp, Frq)\n", peak_pos(final_fourier_pwr_y, frq))    # Print the positions of the peaks
-print("Peaks in X axis \n (Amp, Frq)\n", peak_pos(final_fourier_pwr_x, frq))
-
-
-print("Peaks in X axis \n (Amp, Frq)\n", peak_pos(final_fourier_pwr_x, frq))
+print("Peaks in Y axis \n (Frq, Amp)\n", peak_pos(final_fourier_pwr_y, frq))    # Print the positions of the peaks
+print("Peaks in X axis \n (Frq, Amp)\n", peak_pos(final_fourier_pwr_x, frq))
