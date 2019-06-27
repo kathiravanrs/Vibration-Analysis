@@ -8,8 +8,7 @@ The data containing the values of Fourier Transform is also saved as an excel sh
 Change the following paths for getting the input file and saving the output:
 
     1. vibration_input_path: Path to an EXCEL FILE containing the required vibration Data
-    2. Fourier_output_path: Path to a FOLDER where you want the final excel sheet to be saved
-    3. graph_output_path: Path to a FOLDER where you want the final graph of the FFT to be saved
+    2. output_path: Path to a FOLDER where you want the final graphs and excel sheet to be saved
 
 Before running the file, please check if you already installed the required libraries or packages.
     The required external libraries to be installed are:
@@ -160,19 +159,22 @@ def peak_pos(y_axis, x_axis):
 
 
 vibration_input_file = "Vibration Data/Vibration Data - Modified.xlsx"     # Read the input excel file at this location
-Fourier_output_path = "Fourier Data/"                                      # Save the FFT excel file at this location
-graph_output_path = "Graph/"
+output_path = "Output Files/"                                              # Save the Output file at this location
 
-if not os.path.exists(Fourier_output_path):                 # Check if the given path already exists
-    os.makedirs(Fourier_output_path)                        # Create a new directory if it doesn't exist
+if not os.path.exists(output_path):                 # Check if the given path already exists
+    os.makedirs(output_path)                        # Create a new directory if it doesn't exist
 
-if not os.path.exists(graph_output_path):
-    os.makedirs(graph_output_path)
 
-time = datetime.now().strftime(" %H-%M-%S")                 # Get the current time
+time = datetime.now().strftime("%d-%m-%y   -   %H-%M-%S")                 # Get the current time and date
+excel_path = output_path + time + '/' + 'Excel/'                          # Path created for a folder with given time
+graph_path = output_path + time + '/' + 'Graph/'
+
+if not os.path.exists(output_path + time + '/'):
+    os.makedirs(excel_path)                                 # Create a new directory for excel sheets
+    os.makedirs(graph_path)                                 # Create a new directory for graphs
+
 
 vibration_data = pd.read_excel(vibration_input_file)        # Read the excel file as input
-
 
 # Separating the values of X and Y axis data
 vibraX = pd.DataFrame(vibration_data, columns=['VibraX'])   # Separate the values under the column name 'VibraX'
@@ -212,7 +214,7 @@ x_list = zero_pad(x_list)
 y_list = zero_pad(y_list)
 
 
-Fs = 35                         # Sampling Frequency of the signal
+Fs = 1                          # Sampling Frequency of the signal
 n = len(x_list)                 # Number of samples
 k = [i for i in range(n)]       # List of values from 0 to n [0, 1, 2, .... 4093, 4094, 4095]
 T = n / Fs                      # Total time = No of sample/Sample frequency
@@ -249,7 +251,7 @@ outPowerY = pd.DataFrame({"FourierPower_Y": final_fourier_pwr_y})
 
 
 # The excel file writer is defined along with the filename and path
-writer = pd.ExcelWriter(Fourier_output_path + "Fourier transformed Data   " + time + ".xlsx", engine='xlsxwriter')
+writer = pd.ExcelWriter(excel_path + "Fourier transformed Data.xlsx", engine='xlsxwriter')
 
 
 # The data frame is now written into an excel sheet
@@ -260,7 +262,7 @@ outPowerY.to_excel(writer, startcol=4, index=False, sheet_name='sheet1')
 writer.save()
 
 
-output_file(graph_output_path + "FFT_x   " + time + ".html")     # Name of the output file at the predefined path
+output_file(graph_path + "FFT_x.html")     # Name of the output file at the predefined path
 plot = figure(title="Vibration X fft - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
@@ -271,7 +273,7 @@ plot.line(frq, final_fourier_x)             # To plot the graph
 show(plot)                                  # To open and display the plotted graph
 
 
-output_file(graph_output_path + "FFT_y   " + time + ".html")
+output_file(graph_path + "FFT_y.html")
 plot = figure(title="Vibration Y fft - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
@@ -282,7 +284,7 @@ plot.line(frq, final_fourier_y)
 show(plot)
 
 
-output_file(graph_output_path + "FFT_Power_x   " + time + ".html")
+output_file(graph_path + "FFT_Power_x.html")
 plot = figure(title="Vibration X fft Power - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
@@ -293,7 +295,7 @@ plot.line(frq, final_fourier_pwr_x)
 show(plot)
 
 
-output_file(graph_output_path + "FFT_Power_y   " + time + ".html")
+output_file(graph_path + "FFT_Power_y.html")
 plot = figure(title="Vibration Y fft Power - {} samples".format(length_fixed),
               x_axis_label='Frequency (Hz)',
               y_axis_label='Amplitude (g)',
